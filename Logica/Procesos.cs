@@ -126,6 +126,29 @@ namespace Hospital.Logica
         {
             return Todos.Single(x => x.Codigo == codigo);
         }
+public static DataTable ObtenerHorarios(
+    Sesion s,
+    int medicoId,
+    DateTime fecha)
+{
+    Seguridad.Exigir(s, "Recepcionista");
+
+    using (var db = new Db())
+    {
+        string sql = @"
+            SELECT Inicio, Fin, Duracion
+            FROM Horario
+            WHERE Activo=1
+              AND MedicoId=@m
+              AND Dia=@dia
+            ORDER BY Inicio";
+
+        return db.Tabla(
+            sql,
+            Db.P("@m", medicoId),
+            Db.P("@dia", (int)fecha.DayOfWeek));
+    }
+}
 
         static void Uno(Db db, string sql, params SqlParameter[] ps)
         {
