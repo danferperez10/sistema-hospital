@@ -94,5 +94,21 @@ namespace Hospital.Presentacion
         {
 
         }
+
+        private void btnLimpiar_Click(object sender, EventArgs e)
+        {
+            //Tarea 3
+            Ui.Intentar(() =>
+            {
+                // Vaciamos la tabla de resultados
+                dgvListado.DataSource = null;
+
+                // Reiniciamos los campos vinculados a su estado original
+                if (campos != null)
+                {
+                    campos.Inicializar(sesion);
+                }
+            });
+        }
     }
 }

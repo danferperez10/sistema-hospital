@@ -21,6 +21,7 @@
             this.cboPaciente = new System.Windows.Forms.ComboBox();
             this.btnConsultar = new System.Windows.Forms.Button();
             this.dgvListado = new System.Windows.Forms.DataGridView();
+            this.btnLimpiar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvListado)).BeginInit();
             this.SuspendLayout();
             // 
@@ -78,11 +79,22 @@
             this.dgvListado.Size = new System.Drawing.Size(1020, 559);
             this.dgvListado.TabIndex = 4;
             // 
+            // btnLimpiar
+            // 
+            this.btnLimpiar.Location = new System.Drawing.Point(253, 121);
+            this.btnLimpiar.Name = "btnLimpiar";
+            this.btnLimpiar.Size = new System.Drawing.Size(163, 38);
+            this.btnLimpiar.TabIndex = 5;
+            this.btnLimpiar.Text = "Limpiar";
+            this.btnLimpiar.UseVisualStyleBackColor = true;
+            this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
+            // 
             // FrmHistoriaClinica
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1080, 760);
+            this.Controls.Add(this.btnLimpiar);
             this.Controls.Add(this.lblTitulo);
             this.Controls.Add(this.lblPaciente);
             this.Controls.Add(this.cboPaciente);
@@ -105,5 +117,6 @@
         private System.Windows.Forms.ComboBox cboPaciente;
         private System.Windows.Forms.Button btnConsultar;
         private System.Windows.Forms.DataGridView dgvListado;
+        private System.Windows.Forms.Button btnLimpiar;
     }
 }
