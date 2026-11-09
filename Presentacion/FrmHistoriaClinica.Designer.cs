@@ -23,63 +23,80 @@
             this.dgvListado = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dgvListado)).BeginInit();
             this.SuspendLayout();
+            // 
             // lblTitulo
-            this.lblTitulo.Name = "lblTitulo";
+            // 
             this.lblTitulo.Location = new System.Drawing.Point(28, 20);
+            this.lblTitulo.Name = "lblTitulo";
             this.lblTitulo.Size = new System.Drawing.Size(1000, 40);
             this.lblTitulo.TabIndex = 0;
             this.lblTitulo.Text = "Historia clínica";
+            this.lblTitulo.Click += new System.EventHandler(this.lblTitulo_Click);
+            // 
             // lblPaciente
-            this.lblPaciente.Name = "lblPaciente";
+            // 
             this.lblPaciente.Location = new System.Drawing.Point(28, 75);
+            this.lblPaciente.Name = "lblPaciente";
             this.lblPaciente.Size = new System.Drawing.Size(290, 40);
             this.lblPaciente.TabIndex = 1;
             this.lblPaciente.Text = "Paciente *";
+            // 
             // cboPaciente
-            this.cboPaciente.Name = "cboPaciente";
-            this.cboPaciente.Location = new System.Drawing.Point(328, 75);
-            this.cboPaciente.Size = new System.Drawing.Size(690, 30);
-            this.cboPaciente.TabIndex = 2;
-            this.cboPaciente.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            // 
+            this.cboPaciente.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cboPaciente.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboPaciente.DropDownWidth = 800;
+            this.cboPaciente.Location = new System.Drawing.Point(328, 75);
+            this.cboPaciente.Name = "cboPaciente";
+            this.cboPaciente.Size = new System.Drawing.Size(690, 25);
+            this.cboPaciente.TabIndex = 2;
+            // 
             // btnConsultar
-            this.btnConsultar.Name = "btnConsultar";
+            // 
             this.btnConsultar.Location = new System.Drawing.Point(28, 125);
+            this.btnConsultar.Name = "btnConsultar";
             this.btnConsultar.Size = new System.Drawing.Size(170, 34);
             this.btnConsultar.TabIndex = 3;
             this.btnConsultar.Text = "Consultar";
             this.btnConsultar.Click += new System.EventHandler(this.btnConsultar_Click);
+            // 
             // dgvListado
-            this.dgvListado.Name = "dgvListado";
-            this.dgvListado.Location = new System.Drawing.Point(28, 175);
-            this.dgvListado.Size = new System.Drawing.Size(1020, 559);
-            this.dgvListado.TabIndex = 4;
-            this.dgvListado.ReadOnly = true;
+            // 
             this.dgvListado.AllowUserToAddRows = false;
             this.dgvListado.AllowUserToDeleteRows = false;
-            this.dgvListado.MultiSelect = false;
-            this.dgvListado.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvListado.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvListado.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            this.dgvListado.Location = new System.Drawing.Point(28, 175);
+            this.dgvListado.MultiSelect = false;
+            this.dgvListado.Name = "dgvListado";
+            this.dgvListado.ReadOnly = true;
             this.dgvListado.RowHeadersVisible = false;
-            this.dgvListado.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            this.dgvListado.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvListado.Size = new System.Drawing.Size(1020, 559);
+            this.dgvListado.TabIndex = 4;
+            // 
+            // FrmHistoriaClinica
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(1080, 760);
             this.Controls.Add(this.lblTitulo);
             this.Controls.Add(this.lblPaciente);
             this.Controls.Add(this.cboPaciente);
             this.Controls.Add(this.btnConsultar);
             this.Controls.Add(this.dgvListado);
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1080, 760);
             this.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.MinimumSize = new System.Drawing.Size(800, 600);
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Name = "FrmHistoriaClinica";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Sistema Hospital · Historia clínica";
             this.Load += new System.EventHandler(this.Formulario_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvListado)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
+
         }
 
 #endregion

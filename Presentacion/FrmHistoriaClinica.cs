@@ -65,6 +65,18 @@ namespace Hospital.Presentacion
                     v["Paciente"] == null ? (int? )null : Convert.ToInt32(v["Paciente"]),
                     v["Medico"] == null ? (int? )null : Convert.ToInt32(v["Medico"]));
                 dgvListado.DataSource = tabla;
+                //TareaConsulta1
+                dgvListado.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+                dgvListado.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+                //FinTarea1
+
+                //TareaConsula2
+                if (tabla.Rows.Count == 0)
+                {
+                    MessageBox.Show("No se encontraron registros para los filtros seleccionados.", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                //FinTarea2
+
                 if (tabla.Columns.Contains("FueraRango"))
                 {
                     foreach (DataGridViewRow fila in dgvListado.Rows)
@@ -76,6 +88,11 @@ namespace Hospital.Presentacion
                     }
                 }
             });
+        }
+
+        private void lblTitulo_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
