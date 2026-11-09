@@ -130,6 +130,226 @@ public static DataTable ObtenerHorarios(
     Sesion s,
     int medicoId,
     DateTime fecha)
+public static DataTable ObtenerHorariosDisponibles(
+    Sesion s,
+    int medicoId,
+    DateTime fecha)
+public static DataTable ObtenerHorariosDisponibles(
+    Sesion s,
+    int medicoId,
+    DateTime fecha)
+{
+    Seguridad.Exigir(s, "Recepcionista");
+
+    DataTable resultado = new DataTable();
+
+    resultado.Columns.Add("Inicio", typeof(DateTime));
+    resultado.Columns.Add("Fin", typeof(DateTime));
+    resultado.Columns.Add("Intervalo", typeof(string));
+
+    using (var db = new Db())
+    {
+        string sql = @"
+            SELECT Inicio, Fin, Duracion
+            FROM Horario
+            WHERE Activo=1
+              AND MedicoId=@m
+              AND Dia=@dia
+            ORDER BY Inicio";
+
+        DataTable horarios = db.Tabla(
+            sql,
+            Db.P("@m", medicoId),
+            Db.P("@dia", (int)fecha.DayOfWeek));
+
+        if (horarios.Rows.Count == 0)
+        {
+            return resultado;
+        }
+
+        DataTable citas = db.Tabla(
+            @"
+            SELECT Inicio, Fin
+            FROM Cita
+            WHERE MedicoId=@m
+              AND Estado='Programada'
+              AND Inicio<@h
+              AND Fin>@d
+            ORDER BY Inicio",
+            Db.P("@m", medicoId),
+            Db.P("@d", fecha.Date),
+            Db.P("@h", fecha.Date.AddDays(1)));
+
+        foreach (DataRow horario in horarios.Rows)
+        {
+            TimeSpan inicioHorario =
+                (TimeSpan)horario["Inicio"];
+
+            TimeSpan finHorario =
+                (TimeSpan)horario["Fin"];
+
+            int duracion =
+                Convert.ToInt32(horario["Duracion"]);
+
+            DateTime inicio =
+                fecha.Date.Add(inicioHorario);
+
+            DateTime finHorarioFecha =
+                fecha.Date.Add(finHorario);
+
+            while (inicio.AddMinutes(duracion)
+                   <= finHorarioFecha)
+            {
+                DateTime fin =
+                    inicio.AddMinutes(duracion);
+
+                bool ocupado = false;
+
+                foreach (DataRow cita in citas.Rows)
+                {
+                    DateTime citaInicio =
+                        Convert.ToDateTime(cita["Inicio"]);
+
+                    DateTime citaFin =
+                        Convert.ToDateTime(cita["Fin"]);
+
+                    if (inicio < citaFin &&
+                        fin > citaInicio)
+                    {
+                        ocupado = true;
+                        break;
+                    }
+                }
+
+                if (!ocupado && inicio > DateTime.Now)
+                {
+                    DataRow nueva =
+                        resultado.NewRow();
+
+                    nueva["Inicio"] = inicio;
+                    nueva["Fin"] = fin;
+
+                    nueva["Intervalo"] =
+                        inicio.ToString("HH:mm")
+                        + " - "
+                        + fin.ToString("HH:mm");
+
+                    resultado.Rows.Add(nueva);
+                }
+
+                inicio = fin;
+            }
+        }
+    }
+
+    return resultado;
+}
+{
+    Seguridad.Exigir(s, "Recepcionista");
+
+    DataTable resultado = new DataTable();
+
+    resultado.Columns.Add("Inicio", typeof(DateTime));
+    resultado.Columns.Add("Fin", typeof(DateTime));
+    resultado.Columns.Add("Intervalo", typeof(string));
+
+    using (var db = new Db())
+    {
+        string sql = @"
+            SELECT Inicio, Fin, Duracion
+            FROM Horario
+            WHERE Activo=1
+              AND MedicoId=@m
+              AND Dia=@dia
+            ORDER BY Inicio";
+
+        DataTable horarios = db.Tabla(
+            sql,
+            Db.P("@m", medicoId),
+            Db.P("@dia", (int)fecha.DayOfWeek));
+
+        if (horarios.Rows.Count == 0)
+        {
+            return resultado;
+        }
+
+        DataTable citas = db.Tabla(
+            @"
+            SELECT Inicio, Fin
+            FROM Cita
+            WHERE MedicoId=@m
+              AND Estado='Programada'
+              AND Inicio<@h
+              AND Fin>@d
+            ORDER BY Inicio",
+            Db.P("@m", medicoId),
+            Db.P("@d", fecha.Date),
+            Db.P("@h", fecha.Date.AddDays(1)));
+
+        foreach (DataRow horario in horarios.Rows)
+        {
+            TimeSpan inicioHorario =
+                (TimeSpan)horario["Inicio"];
+
+            TimeSpan finHorario =
+                (TimeSpan)horario["Fin"];
+
+            int duracion =
+                Convert.ToInt32(horario["Duracion"]);
+
+            DateTime inicio =
+                fecha.Date.Add(inicioHorario);
+
+            DateTime finHorarioFecha =
+                fecha.Date.Add(finHorario);
+
+            while (inicio.AddMinutes(duracion)
+                   <= finHorarioFecha)
+            {
+                DateTime fin =
+                    inicio.AddMinutes(duracion);
+
+                bool ocupado = false;
+
+                foreach (DataRow cita in citas.Rows)
+                {
+                    DateTime citaInicio =
+                        Convert.ToDateTime(cita["Inicio"]);
+
+                    DateTime citaFin =
+                        Convert.ToDateTime(cita["Fin"]);
+
+                    if (inicio < citaFin &&
+                        fin > citaInicio)
+                    {
+                        ocupado = true;
+                        break;
+                    }
+                }
+
+                if (!ocupado && inicio > DateTime.Now)
+                {
+                    DataRow nueva =
+                        resultado.NewRow();
+
+                    nueva["Inicio"] = inicio;
+                    nueva["Fin"] = fin;
+
+                    nueva["Intervalo"] =
+                        inicio.ToString("HH:mm")
+                        + " - "
+                        + fin.ToString("HH:mm");
+
+                    resultado.Rows.Add(nueva);
+                }
+
+                inicio = fin;
+            }
+        }
+    }
+
+    return resultado;
+}
 {
     Seguridad.Exigir(s, "Recepcionista");
 

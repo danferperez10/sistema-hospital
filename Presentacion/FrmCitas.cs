@@ -13,11 +13,19 @@ namespace Hospital.Presentacion
         private VinculadorCampos campos;
 
         private Label lblHorarioMedico;
+        private Label lblIntervalo;
+        private ComboBox cboIntervalo;
 
         public FrmCitas()
         {
             InitializeComponent();
+
             CrearIndicadorHorario();
+            CrearSelectorIntervalo();
+
+            // La fecha se selecciona aquí y la hora mediante el combo.
+            dtpInicio.Format = DateTimePickerFormat.Custom;
+            dtpInicio.CustomFormat = "dd/MM/yyyy";
         }
 
         public FrmCitas(Sesion sesion) : this()
@@ -31,11 +39,29 @@ namespace Hospital.Presentacion
             lblHorarioMedico.Name = "lblHorarioMedico";
             lblHorarioMedico.Text = "Horario del médico: seleccione médico y fecha.";
             lblHorarioMedico.Location = new Point(28, 150);
-            lblHorarioMedico.Size = new Size(990, 40);
+            lblHorarioMedico.Size = new Size(990, 35);
             lblHorarioMedico.AutoSize = false;
             lblHorarioMedico.Font = new Font(Font, FontStyle.Bold);
 
             pnlCampos.Controls.Add(lblHorarioMedico);
+        }
+
+        private void CrearSelectorIntervalo()
+        {
+            lblIntervalo = new Label();
+            lblIntervalo.Name = "lblIntervalo";
+            lblIntervalo.Text = "Intervalo disponible *";
+            lblIntervalo.Location = new Point(28, 190);
+            lblIntervalo.Size = new Size(290, 40);
+
+            cboIntervalo = new ComboBox();
+            cboIntervalo.Name = "cboIntervalo";
+            cboIntervalo.Location = new Point(328, 190);
+            cboIntervalo.Size = new Size(690, 30);
+            cboIntervalo.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            pnlCampos.Controls.Add(lblIntervalo);
+            pnlCampos.Controls.Add(cboIntervalo);
         }
 
         private void Formulario_Load(object sender, EventArgs e)
@@ -47,38 +73,79 @@ namespace Hospital.Presentacion
 
             Ui.Intentar(() =>
             {
-                campos = new VinculadorCampos(this, Procesos.Obtener("cita").Campos);
+                campos = new VinculadorCampos(
+                    this,
+                    Procesos.Obtener("cita").Campos);
+
                 campos.Inicializar(sesion);
 
-                cboMedicoId.SelectedIndexChanged += cboMedicoId_SelectedIndexChanged;
-                dtpInicio.ValueChanged += dtpInicio_ValueChanged;
+                cboMedicoId.SelectedIndexChanged +=
+                    cboMedicoId_SelectedIndexChanged;
 
-                MostrarHorarioMedico();
+                dtpInicio.ValueChanged +=
+                    dtpInicio_ValueChanged;
+
+                cboIntervalo.SelectedIndexChanged +=
+                    cboIntervalo_SelectedIndexChanged;
+
+                CargarIntervalosDisponibles();
             });
         }
 
-        private void cboMedicoId_SelectedIndexChanged(object sender, EventArgs e)
+        private void cboMedicoId_SelectedIndexChanged(
+            object sender,
+            EventArgs e)
         {
             if (sesion != null)
             {
-                Ui.Intentar(MostrarHorarioMedico);
+                Ui.Intentar(CargarIntervalosDisponibles);
             }
         }
 
-        private void dtpInicio_ValueChanged(object sender, EventArgs e)
+        private void dtpInicio_ValueChanged(
+            object sender,
+            EventArgs e)
         {
             if (sesion != null)
             {
-                Ui.Intentar(MostrarHorarioMedico);
+                Ui.Intentar(CargarIntervalosDisponibles);
             }
         }
 
-        private void MostrarHorarioMedico()
+        private void cboIntervalo_SelectedIndexChanged(
+            object sender,
+            EventArgs e)
         {
+            if (cboIntervalo.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            DataRowView fila =
+                cboIntervalo.SelectedItem as DataRowView;
+
+            if (fila == null)
+            {
+                return;
+            }
+
+            DateTime inicio =
+                Convert.ToDateTime(fila["Inicio"]);
+
+            dtpInicio.Value = dtpInicio.Value.Date.Add(
+                inicio.TimeOfDay);
+        }
+
+        private void CargarIntervalosDisponibles()
+        {
+            cboIntervalo.DataSource = null;
+            cboIntervalo.Items.Clear();
+
             if (cboMedicoId.SelectedValue == null)
             {
                 lblHorarioMedico.Text =
                     "Horario del médico: seleccione un médico.";
+
                 return;
             }
 
@@ -90,40 +157,63 @@ namespace Hospital.Presentacion
             {
                 lblHorarioMedico.Text =
                     "Horario del médico: seleccione un médico.";
+
                 return;
             }
 
-            DataTable horarios = Procesos.ObtenerHorarios(
-                sesion,
-                medicoId,
-                dtpInicio.Value.Date);
+            DataTable horarios =
+                Procesos.ObtenerHorarios(
+                    sesion,
+                    medicoId,
+                    dtpInicio.Value.Date);
 
             if (horarios.Rows.Count == 0)
             {
                 lblHorarioMedico.Text =
                     "Horario del médico: no tiene horario configurado para este día.";
+
                 return;
             }
 
-            string texto = "Horario del médico: ";
+            string textoHorario =
+                "Horario del médico: ";
 
             for (int i = 0; i < horarios.Rows.Count; i++)
             {
                 if (i > 0)
                 {
-                    texto += " | ";
+                    textoHorario += " | ";
                 }
 
-                texto += Convert.ToDateTime(
-                    horarios.Rows[i]["Inicio"]).ToString("HH:mm");
+                textoHorario +=
+                    Convert.ToDateTime(
+                        horarios.Rows[i]["Inicio"])
+                        .ToString("HH:mm");
 
-                texto += " - ";
+                textoHorario += " - ";
 
-                texto += Convert.ToDateTime(
-                    horarios.Rows[i]["Fin"]).ToString("HH:mm");
+                textoHorario +=
+                    Convert.ToDateTime(
+                        horarios.Rows[i]["Fin"])
+                        .ToString("HH:mm");
             }
 
-            lblHorarioMedico.Text = texto;
+            lblHorarioMedico.Text = textoHorario;
+
+            DataTable disponibles =
+                Procesos.ObtenerHorariosDisponibles(
+                    sesion,
+                    medicoId,
+                    dtpInicio.Value.Date);
+
+            cboIntervalo.DisplayMember = "Intervalo";
+            cboIntervalo.ValueMember = "Inicio";
+            cboIntervalo.DataSource = disponibles;
+
+            if (disponibles.Rows.Count > 0)
+            {
+                cboIntervalo.SelectedIndex = 0;
+            }
         }
 
         private void btnGuardar_Click(object sender, EventArgs e)
@@ -133,10 +223,27 @@ namespace Hospital.Presentacion
                 return;
             }
 
+            if (cboIntervalo.SelectedIndex < 0)
+            {
+                MessageBox.Show(
+                    "Seleccione un intervalo disponible.",
+                    "Citas",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                return;
+            }
+
             Ui.Intentar(() =>
             {
-                int id = Procesos.Ejecutar(sesion, "cita", campos.Leer());
-                MessageBox.Show("Registro guardado. Identificador: " + id);
+                int id = Procesos.Ejecutar(
+                    sesion,
+                    "cita",
+                    campos.Leer());
+
+                MessageBox.Show(
+                    "Registro guardado. Identificador: " + id);
+
                 DialogResult = DialogResult.OK;
                 Close();
             });
