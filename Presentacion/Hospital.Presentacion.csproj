@@ -1,0 +1,317 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="15.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E8858B98-2F05-5216-8081-A4A6EFB1341E}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Hospital.Presentacion</RootNamespace>
+    <AssemblyName>Hospital.Presentacion</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <LangVersion>5</LangVersion>
+    <StartupObject>Hospital.Presentacion.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <StartAction>Project</StartAction>
+    <StartArguments />
+    <StartWorkingDirectory />
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <StartAction>Project</StartAction>
+    <StartArguments />
+    <StartWorkingDirectory />
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Entidades\Hospital.Entidades.csproj">
+      <Project>{533E7A80-4ED8-5587-8016-3297A5F4B5D2}</Project>
+      <Name>Hospital.Entidades</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Datos\Hospital.Datos.csproj">
+      <Project>{CD1BE11D-2678-5E42-A1CC-C55DD37FC296}</Project>
+      <Name>Hospital.Datos</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logica\Hospital.Logica.csproj">
+      <Project>{B0B84BBB-5604-52C7-99EE-180AE32A5C7C}</Project>
+      <Name>Hospital.Logica</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="FrmAdministracion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmAdministracion.Designer.cs">
+      <DependentUpon>FrmAdministracion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmAdmision.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmAdmision.Designer.cs">
+      <DependentUpon>FrmAdmision.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmAgendaCitas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmAgendaCitas.Designer.cs">
+      <DependentUpon>FrmAgendaCitas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmAnularCita.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmAnularCita.Designer.cs">
+      <DependentUpon>FrmAnularCita.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmAtencion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmAtencion.Designer.cs">
+      <DependentUpon>FrmAtencion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmCitas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmCitas.Designer.cs">
+      <DependentUpon>FrmCitas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmColaEmergencia.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmColaEmergencia.Designer.cs">
+      <DependentUpon>FrmColaEmergencia.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmConsultaResultados.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmConsultaResultados.Designer.cs">
+      <DependentUpon>FrmConsultaResultados.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmEspecialidades.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmEspecialidades.Designer.cs">
+      <DependentUpon>FrmEspecialidades.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmExamenes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmExamenes.Designer.cs">
+      <DependentUpon>FrmExamenes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmHistoriaClinica.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmHistoriaClinica.Designer.cs">
+      <DependentUpon>FrmHistoriaClinica.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmHorarios.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmHorarios.Designer.cs">
+      <DependentUpon>FrmHorarios.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmIndicacion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmIndicacion.Designer.cs">
+      <DependentUpon>FrmIndicacion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmInicial.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmInicial.Designer.cs">
+      <DependentUpon>FrmInicial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmLogin.Designer.cs">
+      <DependentUpon>FrmLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmMedicamentos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmMedicamentos.Designer.cs">
+      <DependentUpon>FrmMedicamentos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmOrdenExamen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmOrdenExamen.Designer.cs">
+      <DependentUpon>FrmOrdenExamen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmPacientes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmPacientes.Designer.cs">
+      <DependentUpon>FrmPacientes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmPacienteTemporal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmPacienteTemporal.Designer.cs">
+      <DependentUpon>FrmPacienteTemporal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmPersonal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmPersonal.Designer.cs">
+      <DependentUpon>FrmPersonal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmPrincipal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmPrincipal.Designer.cs">
+      <DependentUpon>FrmPrincipal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmProcesamiento.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmProcesamiento.Designer.cs">
+      <DependentUpon>FrmProcesamiento.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmRechazoMuestra.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmRechazoMuestra.Designer.cs">
+      <DependentUpon>FrmRechazoMuestra.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmResultados.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmResultados.Designer.cs">
+      <DependentUpon>FrmResultados.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmTiemposEspera.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmTiemposEspera.Designer.cs">
+      <DependentUpon>FrmTiemposEspera.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmTomaMuestra.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmTomaMuestra.Designer.cs">
+      <DependentUpon>FrmTomaMuestra.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmTriaje.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmTriaje.Designer.cs">
+      <DependentUpon>FrmTriaje.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Ui.cs" />
+    <Compile Include="VinculadorCampos.cs" />
+    <EmbeddedResource Include="FrmLogin.resx">
+      <DependentUpon>FrmLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmInicial.resx">
+      <DependentUpon>FrmInicial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmPacientes.resx">
+      <DependentUpon>FrmPacientes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmPersonal.resx">
+      <DependentUpon>FrmPersonal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmEspecialidades.resx">
+      <DependentUpon>FrmEspecialidades.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmHorarios.resx">
+      <DependentUpon>FrmHorarios.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmExamenes.resx">
+      <DependentUpon>FrmExamenes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmMedicamentos.resx">
+      <DependentUpon>FrmMedicamentos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmAdmision.resx">
+      <DependentUpon>FrmAdmision.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmCitas.resx">
+      <DependentUpon>FrmCitas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmAnularCita.resx">
+      <DependentUpon>FrmAnularCita.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmPacienteTemporal.resx">
+      <DependentUpon>FrmPacienteTemporal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmTriaje.resx">
+      <DependentUpon>FrmTriaje.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmAtencion.resx">
+      <DependentUpon>FrmAtencion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmOrdenExamen.resx">
+      <DependentUpon>FrmOrdenExamen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmIndicacion.resx">
+      <DependentUpon>FrmIndicacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmAdministracion.resx">
+      <DependentUpon>FrmAdministracion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmTomaMuestra.resx">
+      <DependentUpon>FrmTomaMuestra.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmProcesamiento.resx">
+      <DependentUpon>FrmProcesamiento.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmResultados.resx">
+      <DependentUpon>FrmResultados.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmRechazoMuestra.resx">
+      <DependentUpon>FrmRechazoMuestra.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmHistoriaClinica.resx">
+      <DependentUpon>FrmHistoriaClinica.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmAgendaCitas.resx">
+      <DependentUpon>FrmAgendaCitas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmColaEmergencia.resx">
+      <DependentUpon>FrmColaEmergencia.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmConsultaResultados.resx">
+      <DependentUpon>FrmConsultaResultados.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmTiemposEspera.resx">
+      <DependentUpon>FrmTiemposEspera.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmPrincipal.resx">
+      <DependentUpon>FrmPrincipal.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -1,0 +1,18 @@
+# Visual Studio y archivos generados
+.vs/
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+TestResults/
+# Bases de datos locales y respaldos
+*.mdf
+*.ldf
+*.bak
+# Paquetes y temporales
+*.zip
+*.log
+
+compilado/
