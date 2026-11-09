@@ -144,7 +144,7 @@ namespace Hospital.Presentacion
             if (cboMedicoId.SelectedValue == null)
             {
                 lblHorarioMedico.Text =
-                    "Horario del médico: seleccione un médico.";
+                    "Disponibilidad: seleccione un médico para consultar sus horarios.";
 
                 return;
             }
@@ -156,7 +156,7 @@ namespace Hospital.Presentacion
                 out medicoId))
             {
                 lblHorarioMedico.Text =
-                    "Horario del médico: seleccione un médico.";
+                    "Disponibilidad: no se pudo identificar el médico seleccionado.";
 
                 return;
             }
@@ -170,7 +170,7 @@ namespace Hospital.Presentacion
             if (horarios.Rows.Count == 0)
             {
                 lblHorarioMedico.Text =
-                    "Horario del médico: no tiene horario configurado para este día.";
+                    "Sin disponibilidad: el médico no tiene horario configurado para este día.";
 
                 return;
             }
@@ -212,7 +212,20 @@ namespace Hospital.Presentacion
 
             if (disponibles.Rows.Count > 0)
             {
-                cboIntervalo.SelectedIndex = 0;
+                lblHorarioMedico.Text +=
+        " | Hay " + disponibles.Rows.Count +
+        " intervalo(s) disponible(s).";
+
+    cboIntervalo.SelectedIndex = 0;
+}
+else
+{
+    lblHorarioMedico.Text =
+        "Sin disponibilidad: todos los intervalos del médico " +
+        "están ocupados para esta fecha.";
+
+    cboIntervalo.DataSource = null;
+    cboIntervalo.Items.Clear();
             }
         }
 
