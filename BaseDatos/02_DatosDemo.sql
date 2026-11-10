@@ -1,6 +1,9 @@
 ﻿-- DATOS FICTICIOS PARA EL SISTEMA HOSPITAL
 -- Ejecutar completo en localhost, una vez creada HospitalAcademico.
 -- No borra registros, no cambia contraseñas existentes y no recrea la base.
+-- Carga repetible: inserta únicamente registros que todavía no existen.
+-- Las claves de las listas de origen rechazan códigos/documentos/usuarios repetidos.
+-- No elimina duplicados que ya existan en la base de datos.
 -- Catálogo de demostración: sin dosis, concentraciones ni indicaciones terapéuticas.
 USE [HospitalAcademico];
 SET NOCOUNT ON;
@@ -14,7 +17,7 @@ BEGIN TRY
         THROW 51001, 'Cree primero el administrador inicial desde el login. Luego ejecute este script.', 1;
 
     DECLARE @Resumen TABLE(Entidad nvarchar(70), Insertados int);
-    DECLARE @Especialidades TABLE(Nombre nvarchar(100));
+    DECLARE @Especialidades TABLE(Nombre nvarchar(100) NOT NULL PRIMARY KEY);
     INSERT INTO @Especialidades VALUES
     (N'Medicina general'),
     (N'Pediatría'),
@@ -29,7 +32,7 @@ BEGIN TRY
     WHERE NOT EXISTS(SELECT 1 FROM dbo.Especialidad x WITH(UPDLOCK,HOLDLOCK) WHERE x.Nombre=e.Nombre);
     INSERT @Resumen VALUES(N'Especialidades',@@ROWCOUNT);
 
-    DECLARE @Productos TABLE(Codigo nvarchar(20),Nombre nvarchar(100),Tipo nvarchar(20),Presentacion nvarchar(100));
+    DECLARE @Productos TABLE(Codigo nvarchar(20) NOT NULL PRIMARY KEY,Nombre nvarchar(100),Tipo nvarchar(20),Presentacion nvarchar(100));
     INSERT @Productos VALUES
     (N'DEMO-M001', N'Vitamina A', N'Medicamento', N'Vitaminas | Presentación por completar'),
     (N'DEMO-M002', N'Vitamina B1 (tiamina)', N'Medicamento', N'Vitaminas | Presentación por completar'),
@@ -93,7 +96,7 @@ BEGIN TRY
     WHERE NOT EXISTS(SELECT 1 FROM dbo.MedicamentoProcedimiento x WITH(UPDLOCK,HOLDLOCK) WHERE x.Codigo=p.Codigo);
     INSERT @Resumen VALUES(N'Medicamentos y procedimientos',@@ROWCOUNT);
 
-    DECLARE @Pacientes TABLE(Documento nvarchar(20),Nombres nvarchar(150),Nacimiento date,Sexo nvarchar(20),Direccion nvarchar(200),Telefono nvarchar(30));
+    DECLARE @Pacientes TABLE(Documento nvarchar(20) NOT NULL PRIMARY KEY,Nombres nvarchar(150),Nacimiento date,Sexo nvarchar(20),Direccion nvarchar(200),Telefono nvarchar(30));
     INSERT @Pacientes VALUES
     (N'DEMO-P001', N'Valeria Soto [DEMO]', N'1976-02-02', N'Femenino', N'Dirección ficticia 01', NULL),
     (N'DEMO-P002', N'Mateo Rivas [DEMO]', N'1977-03-03', N'Masculino', N'Dirección ficticia 02', NULL),
@@ -120,7 +123,7 @@ BEGIN TRY
     WHERE NOT EXISTS(SELECT 1 FROM dbo.Paciente x WITH(UPDLOCK,HOLDLOCK) WHERE x.Documento=p.Documento);
     INSERT @Resumen VALUES(N'Pacientes ficticios',@@ROWCOUNT);
 
-    DECLARE @Examenes TABLE(Codigo nvarchar(20),Nombre nvarchar(100),TipoMuestra nvarchar(80));
+    DECLARE @Examenes TABLE(Codigo nvarchar(20) NOT NULL PRIMARY KEY,Nombre nvarchar(100),TipoMuestra nvarchar(80));
     INSERT @Examenes VALUES
     (N'DEMO-E001', N'Hemograma', N'Sangre'),
     (N'DEMO-E002', N'Glucosa', N'Sangre'),
@@ -142,7 +145,7 @@ BEGIN TRY
     WHERE NOT EXISTS(SELECT 1 FROM dbo.Examen x WITH(UPDLOCK,HOLDLOCK) WHERE x.Codigo=e.Codigo);
     INSERT @Resumen VALUES(N'Exámenes de laboratorio',@@ROWCOUNT);
 
-    DECLARE @Personal TABLE(Documento nvarchar(20),Nombres nvarchar(150),Cargo nvarchar(50),Especialidad nvarchar(100),Usuario nvarchar(50),Rol nvarchar(30),ClaveHash varbinary(32),Salt varbinary(16));
+    DECLARE @Personal TABLE(Documento nvarchar(20) NOT NULL PRIMARY KEY,Nombres nvarchar(150),Cargo nvarchar(50),Especialidad nvarchar(100),Usuario nvarchar(50) NOT NULL UNIQUE,Rol nvarchar(30),ClaveHash varbinary(32),Salt varbinary(16));
     INSERT @Personal VALUES
 
     (N'DEMO-D001', N'Ana Torres [DEMO]', N'Médico', N'Medicina general', N'demo.medico01', N'Medico', 0x1c32fa463d512727a895ff227da523544d5642a2231fbbcda0a7fbb720d24a15, 0x91e1a8118510537a30809e3118abcbc2),
@@ -159,12 +162,13 @@ BEGIN TRY
     (N'DEMO-T004', N'Andrés Luna [DEMO]', N'Profesional de laboratorio', NULL, N'demo.laboratorio', N'Profesional', 0xaa54ecfc2d759806dc5db1a0eebcd53e379985498a9b7990a66a6fc96a8cf481, 0x6aed10cfbef1ad23e0c770539fafaabd);
     -- No vincular un usuario DEMO con un documento o rol de otra persona.
     IF EXISTS(SELECT 1 FROM @Personal p JOIN dbo.Personal x ON x.Usuario=p.Usuario OR x.Documento=p.Documento
-              WHERE x.Usuario<>p.Usuario OR x.Documento<>p.Documento OR x.Rol<>p.Rol)
+              WHERE x.Usuario IS NULL OR x.Documento IS NULL OR x.Rol IS NULL
+                 OR x.Usuario<>p.Usuario OR x.Documento<>p.Documento OR x.Rol<>p.Rol)
         THROW 51003, 'Existe una colisión de usuario/documento/rol DEMO. No se aplicaron cambios.', 1;
     INSERT dbo.Personal(Documento,Nombres,Cargo,EspecialidadId,Usuario,Rol,ClaveHash,Salt,Iteraciones,Activo)
     SELECT p.Documento,p.Nombres,p.Cargo,e.Id,p.Usuario,p.Rol,p.ClaveHash,p.Salt,600000,1
     FROM @Personal p LEFT JOIN dbo.Especialidad e ON e.Nombre=p.Especialidad
-    WHERE NOT EXISTS(SELECT 1 FROM dbo.Personal x WITH(UPDLOCK,HOLDLOCK) WHERE x.Usuario=p.Usuario);
+    WHERE NOT EXISTS(SELECT 1 FROM dbo.Personal x WITH(UPDLOCK,HOLDLOCK) WHERE x.Usuario=p.Usuario OR x.Documento=p.Documento);
     INSERT @Resumen VALUES(N'Personal ficticio (8 médicos y 4 usuarios)',@@ROWCOUNT);
 
     -- Dos turnos semanales por médico: lunes y miércoles, 08:00 a 12:00.
@@ -182,6 +186,8 @@ BEGIN TRY
 
     COMMIT TRANSACTION;
     SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+    IF NOT EXISTS(SELECT 1 FROM @Resumen WHERE Insertados>0)
+        PRINT N'Los datos de demostración ya existen o sus horarios están cubiertos. No se insertaron registros.';
     SELECT Entidad,Insertados FROM @Resumen;
     SELECT Tipo,COUNT(*) AS ProductosDemo FROM dbo.MedicamentoProcedimiento
     WHERE Codigo IN(SELECT Codigo FROM @Productos) GROUP BY Tipo;
